@@ -12,10 +12,10 @@
         android:icon="@drawable/favorite"
         />
     <item
-        android:id="@+id/bottom_add"
-        android:title="Add New"
+        android:id="@+id/bottom_category"
+        android:title="Category"
         android:enabled="true"
-        android:icon="@drawable/baseline_add_circle_outline_24"
+        android:icon="@drawable/baseline_category_24"
         />
     <item
         android:id="@+id/bottom_profile"

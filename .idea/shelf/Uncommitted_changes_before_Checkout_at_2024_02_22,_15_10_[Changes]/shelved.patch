@@ -1,0 +1,188 @@
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\nplugins {\n    id(\"com.android.application\") version \"8.2.2\" apply false\n    id(\"org.jetbrains.kotlin.android\") version \"1.9.22\" apply false\n    id(\"com.google.gms.google-services\") version \"4.4.1\" apply false\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
++++ b/build.gradle.kts	(date 1708589222779)
+@@ -1,6 +1,6 @@
++
+ // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ plugins {
+     id("com.android.application") version "8.2.2" apply false
+     id("org.jetbrains.kotlin.android") version "1.9.22" apply false
+-    id("com.google.gms.google-services") version "4.4.1" apply false
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/bottomnav/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.bottomnav\n\nimport androidx.appcompat.app.AppCompatActivity\nimport android.os.Bundle\nimport android.view.MenuItem\nimport android.widget.Button\nimport android.widget.TextView\nimport androidx.appcompat.app.ActionBarDrawerToggle\nimport androidx.core.view.GravityCompat\nimport androidx.fragment.app.Fragment\nimport androidx.fragment.app.FragmentManager\nimport androidx.fragment.app.FragmentTransaction\nimport com.example.bottomnav.databinding.ActivityMainBinding\nimport com.google.android.material.navigation.NavigationView\nimport com.google.firebase.analytics.FirebaseAnalytics\n\nclass MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {\n\n    private lateinit var fragmentManager: FragmentManager\n    private lateinit var binding: ActivityMainBinding\n    private lateinit var textView: TextView\n    private var clickNum = 0\n    private lateinit var analytics: FirebaseAnalytics\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        binding = ActivityMainBinding.inflate(layoutInflater)\n        setContentView(binding.root)\n\n        setSupportActionBar(binding.toolbar)\n\n        textView = findViewById<TextView>(R.id.myText)\n        analytics = FirebaseAnalytics.getInstance(this)\n\n        val upButton = findViewById<Button>(R.id.button)\n        upButton.setOnClickListener{\n            clickNum++\n            textView.text = \"You clicked {clickNum} times!\"\n            analytics.logEvent(\"button_clicked\", null)\n        }\n\n        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.nav_open, R.string.nav_close)\n        binding.drawerLayout.addDrawerListener(toggle)\n        toggle.syncState()\n\n        binding.navigationDrawer.setNavigationItemSelectedListener(this)\n\n        binding.bottomNav.background = null\n        binding.bottomNav.setOnItemSelectedListener { item ->\n            when(item.itemId){\n                R.id.bottom_home -> openFragment(HomeFragment())\n                R.id.bottom_favorite -> openFragment(FavFragment())\n                R.id.bottom_category -> openFragment(CategoryFragment())\n                R.id.bottom_profile -> openFragment(ProfileFragment())\n                R.id.bottom_setting -> openFragment(SettingFragment())\n            }\n            true\n        }\n        fragmentManager = supportFragmentManager\n        openFragment(HomeFragment())\n    }\n\n    override fun onNavigationItemSelected(item: MenuItem): Boolean {\n        when(item.itemId){\n            R.id.nav_home -> openFragment(HomeFragment())\n            R.id.nav_favorite -> openFragment(FavFragment())\n            R.id.nav_profile -> openFragment(ProfileFragment())\n            R.id.nav_setting -> openFragment(SettingFragment())\n        }\n        binding.drawerLayout.closeDrawer(GravityCompat.START)\n        return true\n    }\n\n    override fun onBackPressed() {\n        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {\n            binding.drawerLayout.closeDrawer(GravityCompat.START)\n        } else {\n            super.onBackPressedDispatcher.onBackPressed()\n\n        }\n    }\n\n    private fun openFragment(fragment: Fragment){\n        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()\n        fragmentTransaction.replace(R.id.fragment_container, fragment)\n        fragmentTransaction.commit()\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/bottomnav/MainActivity.kt b/app/src/main/java/com/example/bottomnav/MainActivity.kt
+--- a/app/src/main/java/com/example/bottomnav/MainActivity.kt	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
++++ b/app/src/main/java/com/example/bottomnav/MainActivity.kt	(date 1708589041623)
+@@ -1,5 +1,6 @@
+ package com.example.bottomnav
+ 
++import android.annotation.SuppressLint
+ import androidx.appcompat.app.AppCompatActivity
+ import android.os.Bundle
+ import android.view.MenuItem
+@@ -12,15 +13,12 @@
+ import androidx.fragment.app.FragmentTransaction
+ import com.example.bottomnav.databinding.ActivityMainBinding
+ import com.google.android.material.navigation.NavigationView
+-import com.google.firebase.analytics.FirebaseAnalytics
+ 
+ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+ 
+     private lateinit var fragmentManager: FragmentManager
+     private lateinit var binding: ActivityMainBinding
+-    private lateinit var textView: TextView
+-    private var clickNum = 0
+-    private lateinit var analytics: FirebaseAnalytics
++
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         binding = ActivityMainBinding.inflate(layoutInflater)
+@@ -28,16 +26,6 @@
+ 
+         setSupportActionBar(binding.toolbar)
+ 
+-        textView = findViewById<TextView>(R.id.myText)
+-        analytics = FirebaseAnalytics.getInstance(this)
+-
+-        val upButton = findViewById<Button>(R.id.button)
+-        upButton.setOnClickListener{
+-            clickNum++
+-            textView.text = "You clicked {clickNum} times!"
+-            analytics.logEvent("button_clicked", null)
+-        }
+-
+         val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.nav_open, R.string.nav_close)
+         binding.drawerLayout.addDrawerListener(toggle)
+         toggle.syncState()
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n\n    <application\n        android:allowBackup=\"true\"\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\n        android:fullBackupContent=\"@xml/backup_rules\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/Theme.BottomNav\"\n        tools:targetApi=\"31\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n        <meta-data\n            android:name=\"preloaded_fonts\"\n            android:resource=\"@array/preloaded_fonts\" />\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
++++ b/app/src/main/AndroidManifest.xml	(date 1708564582375)
+@@ -10,11 +10,12 @@
+         android:label="@string/app_name"
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+-        android:theme="@style/Theme.BottomNav"
++        android:theme="@style/Theme.AppCompat.Light"
+         tools:targetApi="31">
+         <activity
+             android:name=".MainActivity"
+-            android:exported="true">
++            android:exported="true"
++            android:theme="@style/Theme.AppCompat.Light">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    id(\"com.android.application\")\n    id(\"org.jetbrains.kotlin.android\")\n    id(\"com.google.gms.google-services\")\n}\n\nandroid {\n    namespace = \"com.example.bottomnav\"\n    compileSdk = 34\n\n    defaultConfig {\n        applicationId = \"com.example.bottomnav\"\n        minSdk = 24\n        targetSdk = 34\n        versionCode = 1\n        versionName = \"1.0\"\n\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            isMinifyEnabled = false\n            proguardFiles(\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\n                \"proguard-rules.pro\"\n            )\n        }\n    }\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_1_8\n        targetCompatibility = JavaVersion.VERSION_1_8\n    }\n    kotlinOptions {\n        jvmTarget = \"1.8\"\n    }\n    buildFeatures {\n        viewBinding = true\n    }\n}\n\ndependencies {\n\n    implementation(\"androidx.core:core-ktx:1.12.0\")\n    implementation(\"androidx.appcompat:appcompat:1.6.1\")\n    implementation(\"com.google.android.material:material:1.11.0\")\n    implementation(\"androidx.constraintlayout:constraintlayout:2.1.4\")\n    implementation(platform(\"com.google.firebase:firebase-bom:32.7.2\"))\n    implementation(\"com.google.firebase:firebase-storage\")\n    implementation(\"com.google.android.gms:play-services-measurement-api:21.5.1\")\n    testImplementation(\"junit:junit:4.13.2\")\n    androidTestImplementation(\"androidx.test.ext:junit:1.1.5\")\n    androidTestImplementation(\"androidx.test.espresso:espresso-core:3.5.1\")\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
++++ b/app/build.gradle.kts	(date 1708589094662)
+@@ -1,7 +1,6 @@
+ plugins {
+     id("com.android.application")
+     id("org.jetbrains.kotlin.android")
+-    id("com.google.gms.google-services")
+ }
+ 
+ android {
+@@ -45,9 +44,6 @@
+     implementation("androidx.appcompat:appcompat:1.6.1")
+     implementation("com.google.android.material:material:1.11.0")
+     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+-    implementation("com.google.firebase:firebase-storage")
+-    implementation("com.google.android.gms:play-services-measurement-api:21.5.1")
+     testImplementation("junit:junit:4.13.2")
+     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+Index: app/google-services.json
+===================================================================
+diff --git a/app/google-services.json b/app/google-services.json
+deleted file mode 100644
+--- a/app/google-services.json	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
++++ /dev/null	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
+@@ -1,29 +0,0 @@
+-{
+-  "project_info": {
+-    "project_number": "1024397159559",
+-    "project_id": "sample-app-5889f",
+-    "storage_bucket": "sample-app-5889f.appspot.com"
+-  },
+-  "client": [
+-    {
+-      "client_info": {
+-        "mobilesdk_app_id": "1:1024397159559:android:53ac792f287e2f26141c22",
+-        "android_client_info": {
+-          "package_name": "com.example.bottomnav"
+-        }
+-      },
+-      "oauth_client": [],
+-      "api_key": [
+-        {
+-          "current_key": "AIzaSyBO017DPayRjrZE8xWhNM31S1707kTBmr8"
+-        }
+-      ],
+-      "services": {
+-        "appinvite_service": {
+-          "other_platform_oauth_client": []
+-        }
+-      }
+-    }
+-  ],
+-  "configuration_version": "1"
+-}
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".ProfileFragment\">\n\n    <!-- TODO: Update blank fragment layout -->\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:id=\"@+id/myText\"\n        android:text=\"hello\"\n        android:textSize=\"24sp\"\n        android:layout_marginLeft=\"130dp\"\n        android:layout_marginTop=\"200dp\"\n        />\n\n    <Button\n        android:id=\"@+id/button\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"70dp\"\n        android:layout_marginLeft=\"130dp\"\n        android:layout_marginTop=\"300dp\"\n        android:gravity=\"center\"\n        android:text=\"Click Here\"\n        android:textColor=\"@color/black\"\n        android:textSize=\"24sp\" />\n\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_home.xml b/app/src/main/res/layout/fragment_home.xml
+--- a/app/src/main/res/layout/fragment_home.xml	(revision c98dba7c9e1d003fac55c9a962d817fc3e8ab26b)
++++ b/app/src/main/res/layout/fragment_home.xml	(date 1708564686222)
+@@ -11,7 +11,7 @@
+         android:id="@+id/myText"
+         android:text="hello"
+         android:textSize="24sp"
+-        android:layout_marginLeft="130dp"
++        android:layout_marginStart="130dp"
+         android:layout_marginTop="200dp"
+         />
+ 
+@@ -19,7 +19,7 @@
+         android:id="@+id/button"
+         android:layout_width="wrap_content"
+         android:layout_height="70dp"
+-        android:layout_marginLeft="130dp"
++        android:layout_marginStart="130dp"
+         android:layout_marginTop="300dp"
+         android:gravity="center"
+         android:text="Click Here"

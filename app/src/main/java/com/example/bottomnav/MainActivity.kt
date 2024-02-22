@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when(item.itemId){
                 R.id.bottom_home -> openFragment(HomeFragment())
                 R.id.bottom_favorite -> openFragment(FavFragment())
+                R.id.bottom_category -> openFragment(CategoryFragment())
                 R.id.bottom_profile -> openFragment(ProfileFragment())
                 R.id.bottom_setting -> openFragment(SettingFragment())
             }
